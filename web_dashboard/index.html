@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyTracker Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation & Controls -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h1>SkyTracker</h1>
+                <p>IMSI Telemetry Node</p>
+            </div>
+            
+            <div class="control-panel">
+                <h2>Tracking Controls</h2>
+                <div class="button-group">
+                    <button id="btn-start-imsi" class="btn btn-primary">
+                        <span class="btn-icon">📶</span>
+                        <span class="btn-text">Catch IMSIs</span>
+                    </button>
+                    <button id="btn-start-node" class="btn btn-primary" style="background-color: var(--secondary-color);">
+                        <span class="btn-icon">📊</span>
+                        <span class="btn-text">GSM Node</span>
+                    </button>
+                    <button id="btn-stop" class="btn btn-danger">
+                        <span class="btn-text">Stop All</span>
+                    </button>
+                    <button id="btn-update" class="btn btn-outline">
+                        <span class="btn-text">Update Codes</span>
+                    </button>
+                    <button id="btn-map" class="btn btn-primary" style="background-color: var(--warning-color);">
+                        <span class="btn-text">Open Map Locator</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="status-panel">
+                <h2>System Status</h2>
+                <ul class="status-list" id="status-list">
+                    <li><span class="process-name">gsm_node</span> <span class="badge badge-unknown" id="status-gsm_node">Unknown</span></li>
+                    <li><span class="process-name">scan_livemon</span> <span class="badge badge-unknown" id="status-scan_livemon">Unknown</span></li>
+                    <li><span class="process-name">imsi_catcher</span> <span class="badge badge-unknown" id="status-imsi_catcher">Unknown</span></li>
+                </ul>
+                <div class="server-status">
+                    API Connection: <span id="api-status" class="status-indicator disconnected">Disconnected</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <h2>Captured Signals</h2>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <span class="metric-label">Total Caught</span>
+                        <span class="metric-value" id="metric-total">0</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Unique IMSIs</span>
+                        <span class="metric-value" id="metric-unique">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="data-container glass-panel">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>IMSI</th>
+                            <th>MCC</th>
+                            <th>MNC</th>
+                            <th>Op Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="imsi-table-body">
+                        <!-- Data will be populated here -->
+                        <tr class="empty-row">
+                            <td colspan="6">Waiting for data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- RF Activity Section -->
+            <div class="activity-section glass-panel" style="margin-top: 20px;">
+                <div class="panel-header">
+                    <h3> Local RF Activity (Bursts)</h3>
+                </div>
+                <div id="activity-feed" class="activity-feed">
+                    <p class="empty-msg">Waiting for RF scans...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Map Modal -->
+    <div id="map-modal" class="modal hidden">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2>Cell Tower Locator</h2>
+                <button id="btn-close-map" class="btn-close">&times;</button>
+            </header>
+            <div id="map-container" class="map-container"></div>
+        </div>
+    </div>
+    
+    <div id="toast-container" class="toast-container"></div>
+    <script src="/script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+paho-mqtt>=2.0.0
+fastapi
+uvicorn
+aiosqlite
+scapy
+setuptools
